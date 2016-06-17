@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import wrapDisplayName from 'recompose/wrapDisplayName'
+import shallowEqual from 'recompose/shallowEqual'
 import debounce from 'lodash.debounce'
 
 const withinViewport = ({
@@ -33,29 +34,36 @@ const withinViewport = ({
 
   componentDidMount() {
     if (window && window.addEventListener) {
-      this.debouncedUpdate = debounce(this.updateState, wait)
-      window.addEventListener('resize', this.debouncedUpdate)
-      window.addEventListener('scroll', this.debouncedUpdate)
-      this.updateState()
+      this.debouncedUpdateResize = debounce(this.updateResize, wait)
+      this.debouncedUpdateScroll = debounce(this.updateScroll, wait)
+      window.addEventListener('resize', this.debouncedUpdateResize)
+      window.addEventListener('scroll', this.debouncedUpdateScroll)
+      this.updateResize()
+      this.updateScroll()
     }
   }
 
   componentWillUnmount() {
     if (window && window.removeEventListener) {
-      window.removeEventListener('resize', this.debouncedUpdate)
-      window.removeEventListener('scroll', this.debouncedUpdate)
+      window.removeEventListener('resize', this.debouncedUpdateResize)
+      window.removeEventListener('scroll', this.debouncedUpdateScroll)
     }
   }
 
-  updateState = () => {
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      shallowEqual(this.props, nextProps) ||
+      shallowEqual(this.inViewport(this.state), this.inViewport(nextState))
+    )
+  }
+
+  updateResize = () => {
     const update = () => {
       const elem = this.refs.withinViewportContainer
 
       this.setState({
         containerWidth: getWidth(elem),
         containerHeight: getHeight(elem),
-        containerTopOffset: getTop(elem),
-        containerLeftOffset: getLeft(elem),
         windowWidth: getViewportWidth(window, document),
         windowHeight: getViewportHeight(window, document),
         updated: true,
@@ -69,26 +77,44 @@ const withinViewport = ({
     }
   }
 
-  inViewport = () => {
-    if (this.state.updated) {
+  updateScroll = () => {
+    const update = () => {
+      const elem = this.refs.withinViewportContainer
+
+      this.setState({
+        containerTopOffset: getTop(elem),
+        containerLeftOffset: getLeft(elem),
+        updated: true,
+      })
+    }
+
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(() => update())
+    } else {
+      update()
+    }
+  }
+
+  inViewport = (state = this.state) => {
+    if (state.updated) {
       return (
         (
-          this.state.containerTopOffset < 0 &&
-          (this.state.containerHeight + this.state.containerTopOffset) > 0
+          state.containerTopOffset < 0 &&
+          (state.containerHeight + state.containerTopOffset) > 0
         ) ||
         (
-          this.state.containerTopOffset >= 0 &&
-          this.state.containerTopOffset < this.state.windowHeight
+          state.containerTopOffset >= 0 &&
+          state.containerTopOffset < state.windowHeight
         )
       ) &&
       (
         (
-          this.state.containerLeftOffset < 0 &&
-          (this.state.containerWidth + this.state.containerLeftOffset) > 0
+          state.containerLeftOffset < 0 &&
+          (state.containerWidth + state.containerLeftOffset) > 0
         ) ||
         (
-          this.state.containerLeftOffset >= 0 &&
-          this.state.containerLeftOffset < this.state.windowWidth
+          state.containerLeftOffset >= 0 &&
+          state.containerLeftOffset < state.windowWidth
         )
       )
     }
