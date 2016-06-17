@@ -52,8 +52,8 @@ const withinViewport = ({
 
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      shallowEqual(this.props, nextProps) ||
-      shallowEqual(this.inViewport(this.state), this.inViewport(nextState))
+      !shallowEqual(this.props, nextProps) ||
+      !shallowEqual(this.inViewport(this.state), this.inViewport(nextState))
     )
   }
 
