@@ -24,11 +24,14 @@ You can change the property name by passing a transformation function, example:
 
 ```js
 const Decorated = WithinViewport(
-  { transform: (inViewport) => ({ insideViewport: inViewport }) }
+  { transform: ({ inViewport }) => ({ insideViewport: inViewport }) }
 )(Header)
 ```
 
-The property passed to the `Header` would change to `insideViewport`
+The property passed to the `Header` would change to `insideViewport`.
+The transformation function also receives: `containerWidth`, `containerHeight`,
+`containerTopOffset`, `containerLeftOffset`, `windowWidth`, `windowHeight` and `ready`.
+Ready is true when all positioning data are loaded.
 
 You can also change the wrapper div style to meet your needs like:
 

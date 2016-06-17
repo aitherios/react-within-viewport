@@ -28,7 +28,9 @@ describe('WithinViewport()(Component)', () => {
   })
 
   describe('when composing with a custom transform function', () => {
-    const Decorated = WithinViewport({ transform: (v) => ({ insideViewport: v }) })(Header)
+    const Decorated = WithinViewport({
+      transform: ({ inViewport }) => ({ insideViewport: inViewport }),
+    })(Header)
 
     beforeEach(() => {
       subject = mount(<Decorated title={'My title'} />)

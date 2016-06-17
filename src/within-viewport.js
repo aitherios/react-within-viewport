@@ -4,7 +4,7 @@ import shallowEqual from 'recompose/shallowEqual'
 import debounce from 'lodash.debounce'
 
 const withinViewport = ({
-  transform = ((inViewport) => ({ inViewport })),
+  transform = (({ inViewport }) => ({ inViewport })),
   containerStyle = ({
     width: '100%',
     height: '100%',
@@ -65,7 +65,10 @@ const withinViewport = ({
   shouldComponentUpdate(nextProps, nextState) {
     return (
       !shallowEqual(this.props, nextProps) ||
-      !shallowEqual(this.inViewport(this.state), this.inViewport(nextState))
+      !shallowEqual(
+        transform({ inViewport: this.inViewport(this.state), ...this.state }),
+        transform({ inViewport: this.inViewport(nextState), ...nextState })
+      )
     )
   }
 
@@ -150,7 +153,7 @@ const withinViewport = ({
         style={containerStyle}
       >
         <BaseComponent
-          {...transform(this.inViewport())}
+          {...transform({ inViewport: this.inViewport(), ...this.state })}
           {...this.props}
         />
       </div>
