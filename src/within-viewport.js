@@ -19,6 +19,8 @@ const withinViewport = ({
   getViewportWidth = ((_window, _document) => _window.innerWidth || _document.clientWidth),
   defaultAnswer = true,
   wait = 200,
+  onViewportEnter = () => {},
+  onViewportLeave = () => {},
 } = {}) => (BaseComponent) => class extends Component {
   static displayName = wrapDisplayName(BaseComponent, 'withinViewport')
 
@@ -29,7 +31,7 @@ const withinViewport = ({
     containerLeftOffset: null,
     windowWidth: null,
     windowHeight: null,
-    updated: false,
+    updated: null,
   }
 
   componentDidMount() {
@@ -41,6 +43,16 @@ const withinViewport = ({
       this.updateResize()
       this.updateScroll()
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const was = this.inViewport(prevState)
+    const is = this.inViewport(this.state)
+
+    if (prevState.updated === null && is === false) { onViewportLeave() }
+    if (prevState.updated === null && is === true) { onViewportEnter() }
+    if (was === true && is === false) { onViewportLeave() }
+    if (was === false && is === true) { onViewportEnter() }
   }
 
   componentWillUnmount() {
