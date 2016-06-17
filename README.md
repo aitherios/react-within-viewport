@@ -18,7 +18,7 @@ import WithinViewport from 'react-within-viewport'
 const Decorated = WithinViewport()(Header)
 ```
 
-Now when you use `<Decorated />` it will pass the boolean property `inViewport`.
+Now when you use `<Decorated />` it will pass the boolean property `inViewport` to `Header`.
 
 You can change the property name by passing a transformation function, example:
 
