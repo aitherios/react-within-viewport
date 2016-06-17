@@ -20,7 +20,8 @@ const Decorated = WithinViewport()(Header)
 
 Now when you use `<Decorated />` it will pass the boolean property `inViewport` to `Header`.
 
-You can change the property name by passing a transformation function, example:
+The passed prop is transformed by a function.
+You can use it to, for example, changing the prop name:
 
 ```js
 const Decorated = WithinViewport(
