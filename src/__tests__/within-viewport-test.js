@@ -12,7 +12,10 @@ describe('WithinViewport()(Component)', () => {
   describe('when composing with default options', () => {
     const Decorated = WithinViewport()(Header)
 
-    beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+    beforeEach(() => {
+      subject = mount(<Decorated title={'My title'} />)
+      subject.setState({ ready: true })
+    })
 
     it('renders', () => { expect(subject).toBeTruthy() })
     it('renders inner component', () => { expect(subject.find(Header).length).toBe(1) })
@@ -27,7 +30,10 @@ describe('WithinViewport()(Component)', () => {
   describe('when composing with a custom transform function', () => {
     const Decorated = WithinViewport({ transform: (v) => ({ insideViewport: v }) })(Header)
 
-    beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+    beforeEach(() => {
+      subject = mount(<Decorated title={'My title'} />)
+      subject.setState({ ready: true })
+    })
 
     it('injects property insideViewport', () => {
       expect(subject.find(Header).prop('insideViewport')).not.toBeUndefined()
@@ -57,7 +63,11 @@ describe('WithinViewport()(Component)', () => {
         getViewportHeight: () => 200,
         getViewportWidth: () => 200,
       })(Header)
-      beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+
+      beforeEach(() => {
+        subject = mount(<Decorated title={'My title'} />)
+        subject.setState({ ready: true })
+      })
 
       it('flags inViewport true', () => {
         expect(subject.find(Header).prop('inViewport')).toBe(true)
@@ -73,7 +83,11 @@ describe('WithinViewport()(Component)', () => {
         getViewportHeight: () => 200,
         getViewportWidth: () => 200,
       })(Header)
-      beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+
+      beforeEach(() => {
+        subject = mount(<Decorated title={'My title'} />)
+        subject.setState({ ready: true })
+      })
 
       it('flags inViewport false', () => {
         expect(subject.find(Header).prop('inViewport')).toBe(false)
@@ -89,7 +103,11 @@ describe('WithinViewport()(Component)', () => {
         getViewportHeight: () => 200,
         getViewportWidth: () => 200,
       })(Header)
-      beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+
+      beforeEach(() => {
+        subject = mount(<Decorated title={'My title'} />)
+        subject.setState({ ready: true })
+      })
 
       it('flags inViewport false', () => {
         expect(subject.find(Header).prop('inViewport')).toBe(false)
@@ -105,7 +123,11 @@ describe('WithinViewport()(Component)', () => {
         getViewportHeight: () => 200,
         getViewportWidth: () => 200,
       })(Header)
-      beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+
+      beforeEach(() => {
+        subject = mount(<Decorated title={'My title'} />)
+        subject.setState({ ready: true })
+      })
 
       it('flags inViewport false', () => {
         expect(subject.find(Header).prop('inViewport')).toBe(false)
@@ -123,7 +145,11 @@ describe('WithinViewport()(Component)', () => {
         getViewportHeight: () => 200,
         getViewportWidth: () => 200,
       })(Header)
-      beforeEach(() => { subject = mount(<Decorated title={'My title'} />) })
+
+      beforeEach(() => {
+        subject = mount(<Decorated title={'My title'} />)
+        subject.setState({ ready: true })
+      })
 
       it('flags inViewport true', () => {
         expect(subject.find(Header).prop('inViewport')).toBe(true)

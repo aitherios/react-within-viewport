@@ -31,7 +31,7 @@ const withinViewport = ({
     containerLeftOffset: null,
     windowWidth: null,
     windowHeight: null,
-    updated: null,
+    ready: false,
   }
 
   componentDidMount() {
@@ -49,8 +49,8 @@ const withinViewport = ({
     const was = this.inViewport(prevState)
     const is = this.inViewport(this.state)
 
-    if (prevState.updated === null && is === false) { onViewportLeave() }
-    if (prevState.updated === null && is === true) { onViewportEnter() }
+    if (prevState.ready === null && is === false) { onViewportLeave() }
+    if (prevState.ready === null && is === true) { onViewportEnter() }
     if (was === true && is === false) { onViewportLeave() }
     if (was === false && is === true) { onViewportEnter() }
   }
@@ -73,13 +73,14 @@ const withinViewport = ({
     const update = () => {
       const elem = this.refs.withinViewportContainer
 
-      this.setState({
+      const newState = {
         containerWidth: getWidth(elem),
         containerHeight: getHeight(elem),
         windowWidth: getViewportWidth(window, document),
         windowHeight: getViewportHeight(window, document),
-        updated: true,
-      })
+      }
+
+      this.setState({ ...newState, ready: this.isReady({ ...this.state, ...newState }) })
     }
 
     if (window.requestAnimationFrame) {
@@ -93,11 +94,11 @@ const withinViewport = ({
     const update = () => {
       const elem = this.refs.withinViewportContainer
 
-      this.setState({
+      const newState = {
         containerTopOffset: getTop(elem),
         containerLeftOffset: getLeft(elem),
-        updated: true,
-      })
+      }
+      this.setState({ ...newState, ready: this.isReady({ ...this.state, ...newState }) })
     }
 
     if (window.requestAnimationFrame) {
@@ -107,8 +108,17 @@ const withinViewport = ({
     }
   }
 
+  isReady = (state = this.state) => (
+    state.containerWidth !== null &&
+    state.containerHeight !== null &&
+    state.containerTopOffset !== null &&
+    state.containerLeftOffset !== null &&
+    state.windowHeight !== null &&
+    state.windowWidth !== null
+  )
+
   inViewport = (state = this.state) => {
-    if (state.updated) {
+    if (state.ready) {
       return (
         (
           state.containerTopOffset < 0 &&
