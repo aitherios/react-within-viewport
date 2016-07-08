@@ -1,4 +1,8 @@
 # react-within-viewport
+[![npm version](https://img.shields.io/npm/v/react-within-viewport.svg?style=flat-square)](https://www.npmjs.com/package/react-within-viewport)
+[![dependency status](https://img.shields.io/david/team-magneto/react-within-viewport.svg?style=flat-square)](https://david-dm.org/team-magneto/react-within-viewport)
+[![build status](https://img.shields.io/travis/team-magneto/react-within-viewport.svg?style=flat-square)](https://travis-ci.org/team-magneto/react-within-viewport)
+
 
 Debounced React high order component to flag when it's container is inside the viewport.
 
