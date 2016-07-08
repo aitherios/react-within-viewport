@@ -3,22 +3,74 @@ import wrapDisplayName from 'recompose/wrapDisplayName'
 import shallowEqual from 'recompose/shallowEqual'
 import debounce from 'lodash.debounce'
 
-const defaultGetHeight = (elem) => elem.getBoundingClientRect().height
-const defaultGetWidth = (elem) => elem.getBoundingClientRect().width
-const defaultGetTop = (elem) => elem.getBoundingClientRect().top
-const defaultGetLeft = (elem) => elem.getBoundingClientRect().left
-const defaultGetViewportHeight = (_window, _document) => _window.innerHeight || _document.clientHeight
-const defaultGetViewportWidth = (_window, _document) => _window.innerWidth || _document.clientWidth
+const defaultGetHeight = (elem = {}) => {
+  if (elem && elem.getBoundingClientRect) {
+    return elem.getBoundingClientRect().height
+  }
+  if (elem) {
+    return elem.clientHeight
+  }
+  return null
+}
+
+const defaultGetWidth = (elem = {}) => {
+  if (elem && elem.getBoundingClientRect) {
+    return elem.getBoundingClientRect().width
+  }
+  if (elem) {
+    return elem.clientWidth
+  }
+  return null
+}
+
+const defaultGetTop = (elem = {}) => {
+  if (elem && elem.getBoundingClientRect) {
+    return elem.getBoundingClientRect().top
+  }
+  if (elem) {
+    return elem.clientTop
+  }
+  return null
+}
+
+const defaultGetLeft = (elem = {}) => {
+  if (elem && elem.getBoundingClientRect) {
+    return elem.getBoundingClientRect().left
+  }
+  if (elem) {
+    return elem.clientLeft
+  }
+  return null
+}
+
+const defaultGetViewportHeight = (_window = {}, _document = {}) => {
+  if (_window || _document) {
+    return _window.innerHeight || _document.clientHeight
+  }
+  return null
+}
+
+const defaultGetViewportWidth = (_window = {}, _document = {}) => {
+  if (_window || _document) {
+    return _window.innerWidth || _document.clientWidth
+  }
+  return null
+}
+
+const defaultTransform = ({ inViewport }) => ({ inViewport })
+
+const defaultContainerStyle = {
+  width: '100%',
+  height: '100%',
+  padding: 0,
+  border: 0,
+}
+
 function noop() {}
 
 const withinViewport = ({
-  transform = (({ inViewport }) => ({ inViewport })),
-  containerStyle = ({
-    width: '100%',
-    height: '100%',
-    padding: 0,
-    border: 0,
-  }),
+  transform = defaultTransform,
+  containerStyle = defaultContainerStyle,
   getHeight = defaultGetHeight,
   getWidth = defaultGetWidth,
   getTop = defaultGetTop,
