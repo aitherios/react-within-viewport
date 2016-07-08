@@ -95,7 +95,7 @@ const withinViewport = ({
   }
 
   componentDidMount() {
-    if (window && window.addEventListener) {
+    if (typeof window !== 'undefined' && window !== null && window.addEventListener) {
       this.debouncedUpdateResize = debounce(this.updateResize, wait)
       this.debouncedUpdateScroll = debounce(this.updateScroll, wait)
       window.addEventListener('resize', this.debouncedUpdateResize, { passive: true })
@@ -116,7 +116,7 @@ const withinViewport = ({
   }
 
   componentWillUnmount() {
-    if (window && window.removeEventListener) {
+    if (typeof window !== 'undefined' && window !== null && window.removeEventListener) {
       window.removeEventListener('resize', this.debouncedUpdateResize)
       window.removeEventListener('scroll', this.debouncedUpdateScroll)
     }
@@ -146,7 +146,7 @@ const withinViewport = ({
       this.setState({ ...newState, ready: this.isReady({ ...this.state, ...newState }) })
     }
 
-    if (window.requestAnimationFrame) {
+    if (typeof window !== 'undefined' && window !== null && window.requestAnimationFrame) {
       window.requestAnimationFrame(() => update())
     } else {
       update()
@@ -164,7 +164,7 @@ const withinViewport = ({
       this.setState({ ...newState, ready: this.isReady({ ...this.state, ...newState }) })
     }
 
-    if (window.requestAnimationFrame) {
+    if (typeof window !== 'undefined' && window !== null && window.requestAnimationFrame) {
       window.requestAnimationFrame(() => update())
     } else {
       update()
