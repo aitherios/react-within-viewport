@@ -98,8 +98,8 @@ const withinViewport = ({
     if (window && window.addEventListener) {
       this.debouncedUpdateResize = debounce(this.updateResize, wait)
       this.debouncedUpdateScroll = debounce(this.updateScroll, wait)
-      window.addEventListener('resize', this.debouncedUpdateResize)
-      window.addEventListener('scroll', this.debouncedUpdateScroll)
+      window.addEventListener('resize', this.debouncedUpdateResize, { passive: true })
+      window.addEventListener('scroll', this.debouncedUpdateScroll, { passive: true })
       this.updateResize()
       this.updateScroll()
     }
