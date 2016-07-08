@@ -96,7 +96,7 @@ const withinViewport = ({
 
   componentDidMount() {
     if (typeof window !== 'undefined' && window !== null && window.addEventListener) {
-      this.mounted = true
+      this.canUpdate = true
       this.debouncedUpdateResize = debounce(this.updateResize, wait)
       this.debouncedUpdateScroll = debounce(this.updateScroll, wait)
       window.addEventListener('resize', this.debouncedUpdateResize, { passive: true })
@@ -118,7 +118,7 @@ const withinViewport = ({
 
   componentWillUnmount() {
     if (typeof window !== 'undefined' && window !== null && window.removeEventListener) {
-      this.mounted = false
+      this.canUpdate = false
       window.removeEventListener('resize', this.debouncedUpdateResize, { passive: true })
       window.removeEventListener('scroll', this.debouncedUpdateScroll, { passive: true })
     }
@@ -135,9 +135,9 @@ const withinViewport = ({
   }
 
   updateResize = () => {
-    if (!this.mounted) { return }
-
     const update = () => {
+      if (!this.canUpdate) { return }
+
       const elem = this.refs.withinViewportContainer
 
       const newState = {
@@ -158,9 +158,9 @@ const withinViewport = ({
   }
 
   updateScroll = () => {
-    if (!this.mounted) { return }
-
     const update = () => {
+      if (!this.canUpdate) { return }
+
       const elem = this.refs.withinViewportContainer
 
       const newState = {
