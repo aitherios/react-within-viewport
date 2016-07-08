@@ -119,8 +119,8 @@ const withinViewport = ({
   componentWillUnmount() {
     if (typeof window !== 'undefined' && window !== null && window.removeEventListener) {
       this.mounted = false
-      window.removeEventListener('resize', this.debouncedUpdateResize)
-      window.removeEventListener('scroll', this.debouncedUpdateScroll)
+      window.removeEventListener('resize', this.debouncedUpdateResize, { passive: true })
+      window.removeEventListener('scroll', this.debouncedUpdateScroll, { passive: true })
     }
   }
 
