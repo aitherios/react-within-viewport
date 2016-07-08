@@ -3,6 +3,14 @@ import wrapDisplayName from 'recompose/wrapDisplayName'
 import shallowEqual from 'recompose/shallowEqual'
 import debounce from 'lodash.debounce'
 
+const defaultGetHeight = (elem) => elem.getBoundingClientRect().height
+const defaultGetWidth = (elem) => elem.getBoundingClientRect().width
+const defaultGetTop = (elem) => elem.getBoundingClientRect().top
+const defaultGetLeft = (elem) => elem.getBoundingClientRect().left
+const defaultGetViewportHeight = (_window, _document) => _window.innerHeight || _document.clientHeight
+const defaultGetViewportWidth = (_window, _document) => _window.innerWidth || _document.clientWidth
+function noop() {}
+
 const withinViewport = ({
   transform = (({ inViewport }) => ({ inViewport })),
   containerStyle = ({
@@ -11,16 +19,16 @@ const withinViewport = ({
     padding: 0,
     border: 0,
   }),
-  getHeight = ((elem) => elem.getBoundingClientRect().height),
-  getWidth = ((elem) => elem.getBoundingClientRect().width),
-  getTop = ((elem) => elem.getBoundingClientRect().top),
-  getLeft = ((elem) => elem.getBoundingClientRect().left),
-  getViewportHeight = ((_window, _document) => _window.innerHeight || _document.clientHeight),
-  getViewportWidth = ((_window, _document) => _window.innerWidth || _document.clientWidth),
+  getHeight = defaultGetHeight,
+  getWidth = defaultGetWidth,
+  getTop = defaultGetTop,
+  getLeft = defaultGetLeft,
+  getViewportHeight = defaultGetViewportHeight,
+  getViewportWidth = defaultGetViewportWidth,
   defaultAnswer = true,
   wait = 200,
-  onViewportEnter = () => {},
-  onViewportLeave = () => {},
+  onViewportEnter = noop,
+  onViewportLeave = noop,
 } = {}) => (BaseComponent) => class extends Component {
   static displayName = wrapDisplayName(BaseComponent, 'withinViewport')
 
